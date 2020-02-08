@@ -1,8 +1,10 @@
 import React from 'react';
-import SingInService from './singInService';
+import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Form, Input } from '@rocketseat/unform';
 import * as Yup from 'yup';
+
+import { singInRequest } from '~/store/modules/auth/actions';
 
 const schema = Yup.object().shape({
     email: Yup.string()
@@ -11,23 +13,13 @@ const schema = Yup.object().shape({
     password: Yup.string().required('A senha e obrigatoria'),
 });
 
-export default function SingIn(props) {
-    async function handleSubmit(event) {
-        try {
-            event.preventDefault();
-            console.tron.log(event);
+export default function SingIn() {
+    const dispatch = useDispatch(singInRequest);
 
-            let session = await SingInService.login({
-                email: event.target.email.value,
-                password: event.target.password.value,
-            });
-            if (session) {
-                localStorage.setItem('session', JSON.stringify(session.data));
-                return props.history.push('/main');
-            }
-        } catch (e) {
-            // let { message } = e.response.data;
-        }
+    async function handleSubmit({ email, password }) {
+        try {
+            dispatch(singInRequest(email, password));
+        } catch (e) {}
     }
 
     return (

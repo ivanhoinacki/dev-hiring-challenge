@@ -1,10 +1,13 @@
+import axios from 'axios';
 import { url } from '~/config';
 
 export default class SingInService {
     static login(data) {
-        return fetch(`${url}/v1/session`, {
+        console.log(data);
+        return axios({
             method: 'post',
-            body: JSON.stringify(data),
+            url: `${url}/v1/session`,
+            data: data,
         });
     }
 }

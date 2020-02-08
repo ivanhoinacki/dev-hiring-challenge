@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 
 import { Link } from 'react-router-dom';
 
-import SingUpService from './singUpService';
-
 import * as Yup from 'yup';
 
 const schema = Yup.object().shape({
@@ -20,20 +18,19 @@ export default function SingUp(props) {
 
     async function handleSubmit(event) {
         try {
-            event.preventDefault();
-            console.tron.log(event);
-            let user = await SingUpService.createUser({
-                name: event.target.name.value,
-                email: event.target.email.value,
-                password: event.target.password.value,
-            });
-
-            if (user) {
-                setSuccessCreate(`Successfully created ${user.data.name} user`);
-                setTimeout(() => {
-                    return props.history.push('/singIn');
-                }, 5000);
-            }
+            // event.preventDefault();
+            // console.tron.log(event);
+            // let user = await SingUpService.createUser({
+            //     name: event.target.name.value,
+            //     email: event.target.email.value,
+            //     password: event.target.password.value,
+            // });
+            // if (user) {
+            //     setSuccessCreate(`Successfully created ${user.data.name} user`);
+            //     setTimeout(() => {
+            //         return props.history.push('/singIn');
+            //     }, 5000);
+            // }
         } catch (e) {
             let { message } = e.response.data;
             setMessageError(message);
