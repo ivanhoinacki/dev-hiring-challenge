@@ -7,12 +7,12 @@ class ProjectController {
       const { id } = req.params;
       const { title } = req.body;
 
-      let project = await Project.findById(boardId);
+      const project = await Project.findById(boardId);
 
       if (!project) {
         return res.status(401).json({ message: 'Project not found' });
       }
-      let list = await List.create({
+      const list = await List.create({
         title: title || 'New List',
         cards: [],
         board: id,

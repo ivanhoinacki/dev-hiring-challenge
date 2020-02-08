@@ -72,7 +72,7 @@ class UserController {
 
   async findAllProjects(req, res, next) {
     try {
-      let user = await User.findById(req.params.id).populate({
+      const user = await User.findById(req.params.id).populate({
         path: 'projects', // projetos
         populate: {
           path: 'lists', //  listas
@@ -92,7 +92,7 @@ class UserController {
 
   async findByIdProject(req, res) {
     try {
-      let project = await Project.findById(req.params.id).populate({
+      const project = await Project.findById(req.params.id).populate({
         path: 'lists',
         populate: {
           path: 'task',
@@ -110,11 +110,11 @@ class UserController {
   async storeProject(req, res) {
     try {
       const { title } = req.body;
-      let { id } = req.params;
+      const { id } = req.params;
 
-      let _PROJECTS_ = await Project.find();
+      const _PROJECTS_ = await Project.find();
 
-      let project = await Project.create({
+      const project = await Project.create({
         title: title + ' ' + _PROJECTS_.length,
         lists: [],
         users: [id],
@@ -140,7 +140,7 @@ class UserController {
     try {
       const { id } = req.params;
 
-      let project = await Project.findById(id);
+      const project = await Project.findById(id);
 
       if (!project) {
         return res.status(400).json({ message: 'project not found' });

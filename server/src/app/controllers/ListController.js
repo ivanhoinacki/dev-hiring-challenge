@@ -7,13 +7,13 @@ class ListController {
       const { id } = req.params;
       const { title, descricao } = JSON.parse(req.body);
 
-      let list = await List.findById(id).populate('project');
+      const list = await List.findById(id).populate('project');
 
       if (!list) {
         return res.status(400).json({ message: 'List no found' });
       }
 
-      let task = await Task.create({
+      const task = await Task.create({
         title: title || 'New Task',
         description: descricao || 'Digite uma descricao',
         list: id,
@@ -39,7 +39,7 @@ class ListController {
     try {
       const { id } = req.params;
 
-      let task = await Task.findById(cardId).populate({
+      const task = await Task.findById(cardId).populate({
         path: 'list',
         populate: {
           path: 'project',
