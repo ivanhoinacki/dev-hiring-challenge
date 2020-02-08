@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Button, Form } from 'react-bootstrap';
+import { Button, Form, FormLabel, ListGroup, ListGroupItem } from 'react-bootstrap';
 
 import { Container } from './styles';
 
@@ -74,6 +74,16 @@ export default function Main() {
         }
     }
 
+    async function onHandlerClickRemoveList(event) {
+        let retorno = await api.get('', { params: { '': '' } });
+        console.log(retorno);
+    }
+
+    async function onHandlerClickRemoveTask(event) {
+        let retorno = await api.get('', { params: { '': '' } });
+        console.log(retorno);
+    }
+
     /************************   RENDERS   ******************************/
     function renderButtonAddListFromProject() {
         return (
@@ -119,13 +129,58 @@ export default function Main() {
         ));
     }
 
+    function renderListFromProject(lists) {
+        return [].concat(lists).map((list, i) => (
+            <div className="col-md-3" key={i}>
+                <FormLabel>{list.title}</FormLabel>
+                <ListGroup>{renderTaskList(list.task, list._id)}</ListGroup>
+                <hr />
+            </div>
+        ));
+    }
+
+    function renderTaskList(tasks, listId) {
+        return [{}].concat(tasks).map((task, i) =>
+            i !== 0 ? (
+                <ListGroupItem key={i} className="description-card">
+                    {task.title} -{' Data criação: ' + new Date(task.createdAt).toLocaleString()}
+                    <div className="mr-auto"></div>
+                    <Button
+                        className="button-edit-card"
+                        variant="outline-danger"
+                        onClick={onHandlerClickRemoveTask}
+                        value={task._id}
+                    >
+                        Delete
+                    </Button>
+                </ListGroupItem>
+            ) : (
+                <ListGroupItem key="new">
+                    <Link className="button" to={`/task/new/${listId}`}>
+                        <Button variant="outline-info">
+                            <b>{'\uFF0B'}</b>&nbsp;Tarefa
+                        </Button>
+                    </Link>
+                    <Button
+                        className="button-remove-list"
+                        variant="outline-info"
+                        onClick={onHandlerClickRemoveList}
+                        value={listId}
+                    >
+                        Remove
+                    </Button>
+                </ListGroupItem>
+            )
+        );
+    }
+
     return (
         <Container>
             <div className="row">
                 <div className="col-md-6">{renderButtonAddListFromProject()}</div>
                 <div className="col-md-6">{renderProjectList(projects)}</div>
             </div>
-            {/* <div className="row">{renderListFromProject(lists)}</div> */}
+            <div className="row">{renderListFromProject(lists)}</div>
         </Container>
     );
 }
