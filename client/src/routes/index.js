@@ -1,24 +1,18 @@
 import React from 'react';
 import { Switch } from 'react-router-dom';
-
 import Route from './Route';
 
-import SingIn from '../pages/SingIn';
-import SingUp from '../pages/SingUp';
+import SingIn from '@/pages/SignIn';
+import SignUp from '@/pages/SignUp';
 
-import Main from '../pages/Main';
+import Dashboard from '@/pages/Main';
 
-import NotFound from '../pages/NotFound';
-
-export default function Routes() {
+export default function Rountes() {
     return (
         <Switch>
-            <Route path="/singIn" exact component={SingIn} />
-            <Route path="/SingUp" exact component={SingUp} />
-
-            <Route path="/main" exact component={Main} isPrivate />
-
-            <Route component={NotFound} />
+            <Route exact path="/" component={SingIn} />
+            <Route path="/signup" component={SignUp} />
+            <Route path="/main" component={Dashboard} isPrivate />
         </Switch>
     );
 }

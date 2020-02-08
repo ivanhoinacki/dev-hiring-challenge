@@ -2,8 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Redirect, Route } from 'react-router-dom';
 
-import AuthLayout from '~/pages/_layouts/auth';
-import DefaultLayout from '~/pages/_layouts/default';
+import AuthLayout from '@/pages/_layouts/AuthLayout';
+import DefaultLayout from '@/pages/_layouts/DefaultLayout';
+
+import { store } from '@/store';
 
 export default function RouterWrapper({
     // aqui eu faco a verificar das nossas paginas privadas
@@ -14,7 +16,8 @@ export default function RouterWrapper({
 }) {
     // Verificacao se o usuario esta logado
     // caso nao esteja redireciona para o login
-    const signed = false;
+    // pega via desestruturacao meu objeto singned do auth
+    const { signed } = store.getState().auth;
 
     if (!signed && isPrivate) {
         return <Redirect to="/singIn" />;
@@ -43,8 +46,7 @@ export default function RouterWrapper({
 
 RouterWrapper.propTypes = {
     isPrivate: PropTypes.bool, // definindo que meu atributo e boolean e nao e required
-    component: PropTypes.oneOfType([PropTypes.element, PropTypes.func])
-        .isRequired, // Estou definido que o tipo do atributo de entrada pode ser element e func e ele e required
+    component: PropTypes.oneOfType([PropTypes.element, PropTypes.func]).isRequired, // Estou definido que o tipo do atributo de entrada pode ser element e func e ele e required
 };
 
 RouterWrapper.defaultProps = {

@@ -4,8 +4,16 @@ import PropTypes from 'prop-types';
 // meu component css criado pelo styled-components
 import { Wrapper } from './styles';
 // - children Sao todos os componentes que sao filhos do meu Wrapper
+
+import Header from '@/components/Header';
+
 export default function DefaultLayout({ children }) {
-    return <Wrapper>{children}</Wrapper>;
+    return (
+        <Wrapper>
+            <Header />
+            {children}
+        </Wrapper>
+    );
 }
 
 // toda vez que criamos um component e o mesmo faz uso de atributos devemos declare eles

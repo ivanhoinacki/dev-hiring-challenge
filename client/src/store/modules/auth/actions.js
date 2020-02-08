@@ -1,19 +1,32 @@
-export function singInRequest(email, password) {
+export function logInRequest(email, password) {
     return {
-        type: '@auth/SING_IN_REQUEST',
+        type: '@auth/LOG_IN_REQUEST',
         payload: { email, password },
     };
 }
 
-export function singInSuccess(token, user) {
+export function logInSuccess(token, user) {
     return {
-        type: '@auth/SING_IN_SUCCESS',
+        type: '@auth/LOG_IN_SUCCESS',
         payload: { token, user },
     };
 }
 
-export function singFailure() {
+export function signUpRequest(name, email, password) {
     return {
-        type: '@auth/SING_FAILURE',
+        type: '@auth/SIGN_UP_REQUEST',
+        payload: { name, email, password },
+    };
+}
+
+export function signFailure() {
+    return {
+        type: '@auth/SIGN_FAILURE',
+    };
+}
+
+export function logOut() {
+    return {
+        type: '@auth/LOG_OUT',
     };
 }

@@ -10,7 +10,6 @@ module.exports = {
         SharedArrayBuffer: 'readonly',
         __DEV__: true,
     },
-    parse: 'babel-eslint',
     parserOptions: {
         ecmaFeatures: {
             jsx: true,
@@ -23,9 +22,10 @@ module.exports = {
         'prettier/prettier': 'error',
         'react/jsx-filename-extension': [
             'error',
-            { extension: ['.jsx', '.js'] },
+            { extensions: ['.js', '.jsx'] },
         ],
         'import/prefer-default-export': 'off',
+        'no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
         'react/jsx-one-expression-per-line': 'off',
         'global-require': 'off',
         'react-native/no-raw-text': 'off',
@@ -38,8 +38,8 @@ module.exports = {
     },
     settings: {
         'import/resolver': {
-            'babel-plugin-root-import': {
-                rootPathSuffix: 'src',
+            alias: {
+                map: [['@', './src']],
             },
         },
     },

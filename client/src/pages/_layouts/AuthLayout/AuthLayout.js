@@ -2,7 +2,7 @@ import React from 'react';
 
 import PropTypes from 'prop-types';
 // meu component css criado pelo styled-components
-import { Wrapper, Content } from './styles';
+import { Wrapper, Content } from './AuthLayout_Styles';
 // - children Sao todos os componentes que sao filhos do meu Wrapper
 export default function AuthLayout({ children }) {
     return (
