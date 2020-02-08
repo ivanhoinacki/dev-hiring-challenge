@@ -1,5 +1,6 @@
 import Project from '../models/Project';
 import User from '../models/User';
+import List from '../models/List';
 
 class ProjectController {
   async storeList(req, res) {
@@ -7,7 +8,7 @@ class ProjectController {
       const { id } = req.params;
       const { title } = req.body;
 
-      const project = await Project.findById(boardId);
+      const project = await Project.findById(id);
 
       if (!project) {
         return res.status(401).json({ message: 'Project not found' });
@@ -26,7 +27,8 @@ class ProjectController {
         data: list,
       });
     } catch (error) {
-      return res.status(400).json(error);
+      console.log(error);
+      return res.status(400).json(error.message);
     }
   }
 
@@ -54,7 +56,8 @@ class ProjectController {
         data: project,
       });
     } catch (error) {
-      return res.status(400).json(error);
+      console.log(error);
+      return res.status(400).json(error.message);
     }
   }
 }

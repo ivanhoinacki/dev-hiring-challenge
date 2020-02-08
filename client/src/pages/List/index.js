@@ -1,22 +1,27 @@
 import React from 'react';
-
-import { Form, Button } from 'react-bootstrap';
-
+import { toast } from 'react-toastify';
+import { Form, Input } from '@rocketseat/unform';
+import api from '~/services/api';
+import * as Yup from 'yup';
 import { Container } from './styles';
 
+const schema = Yup.object().shape({
+    title: Yup.string().required('Please enter one title'),
+});
+
 export default function List(props) {
-    async function handleSubmit(event) {
-        event.preventDefault();
+    async function handleSubmit({ title }) {
         try {
-            event.preventDefault();
             let { id } = props.match.params;
 
-            let list = await api.get('', { params: { '': '' } });
+            let list = await api.post(`/project/${id}/list`, { title: title });
+
             if (list) {
+                toast.success('List saved successfully.');
                 props.history.push('/main');
             }
-        } catch (error) {
-            console.error(error);
+        } catch (e) {
+            toast.error('List not saved. Please verify your data.');
         }
     }
 
@@ -26,26 +31,25 @@ export default function List(props) {
 
     return (
         <Container>
-            <Form onSubmit={handleSubmit}>
-                <h4>New List</h4>
-                <Form.Group controlId="Title">
-                    <Form.Label>Title</Form.Label>
-                    <Form.Control type="text" name="title" />
-                </Form.Group>
-                <Form.Group controlId="Actions" className="button-card-actions">
-                    <Button className="button-save-list" variant="info" size="lg" type="submit">
+            <Form schema={schema} onSubmit={handleSubmit}>
+                <h4>New List </h4>
+                <div className="form-group">
+                    <label>Title</label>
+                    <Input className="form-control" placeholder="Title list on board" type="text" name="title" />
+                </div>
+                <div className="form-group button-card-actions">
+                    <button className="btn btn-info button-save-list" size="lg" type="submit">
                         Salvar
-                    </Button>
-                    <Button
+                    </button>
+                    <button
+                        className="btn btn-secondary button-cancel-list"
                         variant="secondary"
-                        className="button-cancel-list"
-                        size="lg"
                         type="button"
                         onClick={onClickBack}
                     >
                         Cancelar
-                    </Button>
-                </Form.Group>
+                    </button>
+                </div>
             </Form>
         </Container>
     );

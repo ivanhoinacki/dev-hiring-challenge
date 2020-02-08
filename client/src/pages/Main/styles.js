@@ -6,7 +6,8 @@ export const Container = styled.div`
     margin: 50px auto;
     display: flex;
     flex-direction: column;
-
+    padding-left: 20px;
+    padding-right: 20px;
     .description-card {
         font-size: 12px;
         font-family: Arial, Helvetica, sans-serif;

@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+
 import { Button, Form, FormLabel, ListGroup, ListGroupItem } from 'react-bootstrap';
 
 import { Container } from './styles';
@@ -10,6 +12,7 @@ export default function Main() {
     const [lists, setLists] = useState([]);
     const [projects, setProjects] = useState([]);
     const [projectId, setProjectId] = useState('');
+    const { id } = useSelector(state => state.user.profile);
 
     useEffect(() => {
         async function onLoad() {
@@ -17,16 +20,18 @@ export default function Main() {
                 /**
                  * Carrega os projects do content
                  */
-                const projects = await api.get('', { params: { '': '' } });
-                setProjects(projects);
+
+                const { data } = await api.get(`/users/${id}/project`);
+
+                setProjects(data);
                 setProjectId(document.querySelector('[name="lista"]').value);
-                setLists(projects[0].lists);
+                setLists(data[0].lists);
             } catch (e) {
                 console.log(e);
             }
         }
         onLoad();
-    }, []);
+    }, [id]); // adiciona o valor de entrada no useEffect
 
     /************************   HANDLERS   ******************************/
     /**
@@ -53,22 +58,6 @@ export default function Main() {
             setProjectId(event.target.value);
             const projectsById = await api.get('', { params: { '': '' } });
             setLists(projectsById.lists);
-        } catch (error) {
-            console.error(error);
-        }
-    }
-
-    /**
-     * Botao adicionar nova mesa
-     */
-    async function handlerAddProject(event) {
-        try {
-            event.preventDefault();
-            let project = await api.get('', { params: { '': '' } });
-            if (project) {
-                let projects = await api.get('', { params: { '': '' } });
-                setProjects(projects);
-            }
         } catch (error) {
             console.error(error);
         }
@@ -109,10 +98,11 @@ export default function Main() {
                     <Form.Control onChange={handleProjectChange} name="lista" as="select">
                         {renderProjectOptions(projects)}
                     </Form.Control>
-
-                    <Button className="button-add-project" onClick={handlerAddProject} variant="info">
-                        <b>{'\uFF0B'}</b>&nbsp;Add
-                    </Button>
+                    <Link to={`/project/new/${id}`}>
+                        <Button className="button-add-project" variant="info">
+                            <b>{'\uFF0B'}</b>&nbsp;Add
+                        </Button>
+                    </Link>
                     <Button className="button-remove-project" type="submit" variant="secondary">
                         Delete
                     </Button>

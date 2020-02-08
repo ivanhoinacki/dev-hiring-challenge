@@ -84,7 +84,7 @@ class UserController {
           },
         },
       });
-      return res.status(200).json({ data: user.projects });
+      return res.status(200).json(user.projects);
     } catch (error) {
       return res.status(400).json(error);
     }
@@ -112,16 +112,14 @@ class UserController {
       const { title } = req.body;
       const { id } = req.params;
 
-      const _PROJECTS_ = await Project.find();
-
       const project = await Project.create({
-        title: title + ' ' + _PROJECTS_.length,
+        title: title,
         lists: [],
         users: [id],
       });
 
       await User.findByIdAndUpdate(
-        userId,
+        id,
         {
           $addToSet: { projects: project },
         },
@@ -132,7 +130,8 @@ class UserController {
         data: project,
       });
     } catch (error) {
-      return res.status(400).json(error);
+      console.log(error);
+      return res.status(400).json(error.message);
     }
   }
 
@@ -160,7 +159,8 @@ class UserController {
         data: project,
       });
     } catch (error) {
-      return res.status(400).json(error);
+      console.log(error);
+      return res.status(400).json(error.message);
     }
   }
 }

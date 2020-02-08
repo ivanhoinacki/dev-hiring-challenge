@@ -2,17 +2,19 @@ import styled from 'styled-components';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 export const Container = styled.div`
+    width: 360px;
+    padding: 20px;
     @media all and (min-width: 480px) {
-        .new-board {
+        .new-list {
             padding: 60px 0;
         }
 
-        .new-board form {
+        .new-list form {
             margin: 0 auto;
             max-width: 320px;
         }
     }
-    .button-board-actions {
+    .button-list-actions {
         width: 100%;
     }
 

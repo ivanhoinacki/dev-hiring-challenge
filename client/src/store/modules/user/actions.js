@@ -1,18 +1,18 @@
-export function updateProfileRequest(data) {
+export function findAllProjectsRequest(data) {
     return {
-        type: '@user/UPDATE_PROFILE_REQUEST',
+        type: '@user/FIND_ALL_PROJECT_REQUEST',
         payload: { data },
     };
 }
 
-export function updateProfileSuccess(profile) {
+export function findAllProjectsSuccess(projects) {
     return {
         type: '@user/UPDATE_PROFILE_SUCCESS',
-        payload: { profile },
+        payload: { projects },
     };
 }
 
-export function updateProfileFailure() {
+export function findAllProjectsFailure() {
     return {
         type: '@user/UPDATE_PROFILE_FAILURE',
     };

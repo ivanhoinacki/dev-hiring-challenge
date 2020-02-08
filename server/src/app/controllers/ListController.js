@@ -31,7 +31,8 @@ class ListController {
         data: task,
       });
     } catch (error) {
-      return res.status(400).json(error);
+      console.log(error);
+      return res.status(400).json(error.message);
     }
   }
 
@@ -62,7 +63,8 @@ class ListController {
         data: task,
       });
     } catch (error) {
-      return res.status(400).json(error);
+      console.log(error);
+      return res.status(400).json(error.message);
     }
   }
 }
