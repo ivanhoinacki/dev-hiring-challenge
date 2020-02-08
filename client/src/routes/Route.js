@@ -20,7 +20,7 @@ export default function RouterWrapper({
     const { signed } = store.getState().auth;
 
     if (!signed && isPrivate) {
-        return <Redirect to="/singIn" />;
+        return <Redirect to="/" />;
     }
 
     // Se ele tiver logado e nao for privada ele manda pro main
