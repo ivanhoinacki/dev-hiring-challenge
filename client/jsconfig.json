@@ -6,7 +6,3 @@
         }
     }
 }
-
-// Configuracao extra para o root import
-// Com essa configuracao eu consigo acessar os arquivos referenciados
-// nos files

@@ -1,73 +1,52 @@
-import React, { useState } from 'react';
-import { Button, FormGroup, FormControl, FormLabel } from 'react-bootstrap';
-import { LinkContainer } from 'react-router-bootstrap';
+import React from 'react';
 import SingInService from './singInService';
+import { Link } from 'react-router-dom';
+import { Form, Input } from '@rocketseat/unform';
+import * as Yup from 'yup';
 
-import './styles.css';
+const schema = Yup.object().shape({
+    email: Yup.string()
+        .email('Insira um email valido')
+        .required('o email e obrigatorio'),
+    password: Yup.string().required('A senha e obrigatoria'),
+});
 
 export default function SingIn(props) {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [messageError, setMessageError] = useState('');
-
-    function validateForm() {
-        return email.length > 0 && password.length > 0;
-    }
-
     async function handleSubmit(event) {
         try {
             event.preventDefault();
-            setMessageError('');
+            console.tron.log(event);
+
             let session = await SingInService.login({
-                email: email,
-                password: password,
+                email: event.target.email.value,
+                password: event.target.password.value,
             });
             if (session) {
                 localStorage.setItem('session', JSON.stringify(session.data));
                 return props.history.push('/main');
             }
         } catch (e) {
-            let { message } = e.response.data;
-            setMessageError(message);
+            // let { message } = e.response.data;
         }
     }
 
     return (
-        <div className="SingIn">
-            <form onSubmit={handleSubmit}>
-                <span className="message-erro-singin">
-                    {messageError ? messageError : ''}
-                </span>
-                <FormGroup controlId="email">
-                    <FormLabel>Email</FormLabel>
-                    <FormControl
-                        autoFocus
-                        type="email"
-                        value={email}
-                        onChange={e => setEmail(e.target.value)}
-                    />
-                </FormGroup>
-                <FormGroup controlId="password">
-                    <FormLabel>Password</FormLabel>
-                    <FormControl
-                        value={password}
-                        onChange={e => setPassword(e.target.value)}
-                        type="password"
-                    />
-                </FormGroup>
-                <Button block disabled={!validateForm()} type="submit">
-                    Login
-                </Button>
-                <LinkContainer to="/singUp">
-                    <Button
-                        className="button-singup"
-                        variant="secondary"
-                        type="button"
-                    >
-                        SingUp
-                    </Button>
-                </LinkContainer>
-            </form>
-        </div>
+        <>
+            <Form schema={schema} onSubmit={handleSubmit}>
+                <Input
+                    name="email"
+                    autoFocus
+                    type="email"
+                    placeholder="Digite seu e-mail"
+                />
+                <Input
+                    name="password"
+                    placeholder="Digite sua senha"
+                    type="password"
+                />
+                <button type="submit">Acessar</button>
+                <Link to="/singUp">Criar uma conta</Link>
+            </Form>
+        </>
     );
 }

@@ -2,10 +2,14 @@ import React from 'react';
 
 import PropTypes from 'prop-types';
 // meu component css criado pelo styled-components
-import { Wrapper } from './styles';
+import { Wrapper, Content } from './styles';
 // - children Sao todos os componentes que sao filhos do meu Wrapper
 export default function AuthLayout({ children }) {
-    return <Wrapper>{children}</Wrapper>;
+    return (
+        <Wrapper>
+            <Content>{children}</Content>
+        </Wrapper>
+    );
 }
 
 // toda vez que criamos um component e o mesmo faz uso de atributos devemos declare eles
