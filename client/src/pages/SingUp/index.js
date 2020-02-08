@@ -2,6 +2,6 @@ import React from 'react';
 
 // import { Container } from './styles';
 
-export default function main() {
-    return <h1>Main</h1>;
+export default function SingUp() {
+    return <div />;
 }

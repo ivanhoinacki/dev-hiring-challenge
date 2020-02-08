@@ -1,10 +1,12 @@
 import React from 'react';
-import { DivNotFound } from './styles';
+import './styles.css';
 
-export default function NotFound() {
+// import { Container } from './styles';
+
+export default function notFound() {
     return (
-        <DivNotFound>
+        <div className="not-found">
             <h3>Sorry, page not found!</h3>
-        </DivNotFound>
+        </div>
     );
 }

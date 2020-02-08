@@ -1,0 +1,20 @@
+@media all and (min-width: 480px) {
+    .SingIn {
+        padding: 60px 0;
+    }
+
+    .SingIn form {
+        margin: 0 auto;
+        max-width: 320px;
+    }
+}
+
+.button-singup {
+    margin-top: 10px;
+    float: right;
+}
+
+.message-erro-singin {
+    text-align: center;
+    color: red;
+}
