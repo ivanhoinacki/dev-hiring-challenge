@@ -20,10 +20,7 @@ module.exports = {
     plugins: ['react', 'jsx-a11y', 'import', 'react-hooks', 'prettier'],
     rules: {
         'prettier/prettier': 'error',
-        'react/jsx-filename-extension': [
-            'error',
-            { extensions: ['.js', '.jsx'] },
-        ],
+        'react/jsx-filename-extension': ['error', { extensions: ['.js', '.jsx'] }],
         'import/prefer-default-export': 'off',
         'no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
         'react/jsx-one-expression-per-line': 'off',
@@ -35,11 +32,16 @@ module.exports = {
         'no-console': ['error', { allow: ['tron'] }],
         'react-hooks/rules-of-hooks': 'error',
         'react-hooks/exhaustive-deps': 'warn',
+        'react/jsx-filename-extension': [
+            'warn',
+            { extension: ['.jsx', '.js'] }, //Essa regra é para que o vs code aceite trabalhar com extensões .js sem dar warn
+        ],
+        'import/prefer-default-export': 'off', // Essa regra, desativa a obrigação de criar o export default quando só tem 1 export
     },
     settings: {
         'import/resolver': {
-            alias: {
-                map: [['@', './src']],
+            'babel-plugin-root-import': {
+                rootPathSuffix: 'src',
             },
         },
     },

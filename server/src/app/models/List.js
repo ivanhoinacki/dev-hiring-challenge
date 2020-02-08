@@ -2,11 +2,12 @@ import mongoose from 'mongoose';
 
 const ListSchema = new mongoose.Schema(
   {
-    title: String,
-    description: String,
-    board: {
+    title: {
+      type: String,
+    },
+    Project: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Board',
+      ref: 'Project',
     },
     task: [
       {
@@ -17,7 +18,7 @@ const ListSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
-  },
+  }
 );
 
 export default mongoose.model('List', ListSchema);

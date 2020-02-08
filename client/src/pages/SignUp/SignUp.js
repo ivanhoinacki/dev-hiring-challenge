@@ -4,8 +4,8 @@ import { Link } from 'react-router-dom';
 import { Form, Input } from '@rocketseat/unform';
 import * as Yup from 'yup';
 
-import logo from '@/assets/img/edirect-logo.svg';
-import { signUpRequest } from '@/store/modules/auth/actions';
+import logo from '~/assets/img/edirect-logo.svg';
+import { signUpRequest } from '~/store/modules/auth/actions';
 
 const schema = Yup.object().shape({
     name: Yup.string().required('Please enter your name'),

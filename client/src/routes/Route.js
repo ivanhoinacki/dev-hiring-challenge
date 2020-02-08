@@ -2,10 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Redirect, Route } from 'react-router-dom';
 
-import AuthLayout from '@/pages/_layouts/AuthLayout';
-import DefaultLayout from '@/pages/_layouts/DefaultLayout';
+import AuthLayout from '~/pages/_layouts/AuthLayout';
+import DefaultLayout from '~/pages/_layouts/DefaultLayout';
 
-import { store } from '@/store';
+import { store } from '~/store';
 
 export default function RouterWrapper({
     // aqui eu faco a verificar das nossas paginas privadas

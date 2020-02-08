@@ -4,9 +4,9 @@ import { Link } from 'react-router-dom';
 import { Form, Input } from '@rocketseat/unform';
 import * as Yup from 'yup';
 
-import { logInRequest } from '@/store/modules/auth/actions';
+import { logInRequest } from '~/store/modules/auth/actions';
 
-import logo from '@/assets/img/edirect-logo.svg';
+import logo from '~/assets/img/edirect-logo.svg';
 
 const schema = Yup.object().shape({
     email: Yup.string()

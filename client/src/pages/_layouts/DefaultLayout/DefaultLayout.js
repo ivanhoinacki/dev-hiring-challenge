@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { Wrapper } from './styles';
 // - children Sao todos os componentes que sao filhos do meu Wrapper
 
-import Header from '@/components/Header';
+import Header from '~/components/Header';
 
 export default function DefaultLayout({ children }) {
     return (

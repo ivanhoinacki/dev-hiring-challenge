@@ -1,9 +1,19 @@
 import mongoose from 'mongoose';
 
-const CardSchema = new mongoose.Schema(
+const TaskSchema = new mongoose.Schema(
   {
-    title: String,
-    description: String,
+    title: {
+      type: String,
+    },
+    description: {
+      type: String,
+    },
+    dateComplete: {
+      type: Date,
+    },
+    done: {
+      type: Boolean,
+    },
     list: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'List',
@@ -20,4 +30,4 @@ const CardSchema = new mongoose.Schema(
   }
 );
 
-export default mongoose.model('Task', CardSchema);
+export default mongoose.model('Task', TaskSchema);
