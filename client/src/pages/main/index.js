@@ -8,19 +8,19 @@ import api from '~/services/api';
 
 export default function Main() {
     const [lists, setLists] = useState([]);
-    const [boards, setBoards] = useState([]);
-    const [boardId, setBoardId] = useState('');
+    const [projects, setProjects] = useState([]);
+    const [projectId, setProjectId] = useState('');
 
     useEffect(() => {
         async function onLoad() {
             try {
                 /**
-                 * Carrega os boards do content
+                 * Carrega os projects do content
                  */
-                const boards = await api.get('', { params: { '': '' } });
-                setBoards(boards);
-                setBoardId(document.querySelector('[name="lista"]').value);
-                setLists(boards[0].lists);
+                const projects = await api.get('', { params: { '': '' } });
+                setProjects(projects);
+                setProjectId(document.querySelector('[name="lista"]').value);
+                setLists(projects[0].lists);
             } catch (e) {
                 console.log(e);
             }
@@ -32,13 +32,13 @@ export default function Main() {
     /**
      * Botao remove mesa selecionada
      */
-    async function handlerRemoveBoard(event) {
+    async function handlerRemoveProject(event) {
         try {
             event.preventDefault();
-            let board = await api.get('', { params: { '': '' } });
-            if (board) {
-                let boards = await api.get('', { params: { '': '' } });
-                setBoards(boards);
+            let project = await api.get('', { params: { '': '' } });
+            if (project) {
+                let projects = await api.get('', { params: { '': '' } });
+                setProjects(projects);
             }
         } catch (error) {
             console.error(error);
@@ -46,13 +46,13 @@ export default function Main() {
     }
 
     /**
-     * Troca de board
+     * Troca de project
      */
-    async function handleBoardChange(event) {
+    async function handleProjectChange(event) {
         try {
-            setBoardId(event.target.value);
-            const boardsById = await api.get('', { params: { '': '' } });
-            setLists(boardsById.lists);
+            setProjectId(event.target.value);
+            const projectsById = await api.get('', { params: { '': '' } });
+            setLists(projectsById.lists);
         } catch (error) {
             console.error(error);
         }
@@ -61,13 +61,13 @@ export default function Main() {
     /**
      * Botao adicionar nova mesa
      */
-    async function handlerAddBoard(event) {
+    async function handlerAddProject(event) {
         try {
             event.preventDefault();
-            let board = await api.get('', { params: { '': '' } });
-            if (board) {
-                let boards = await api.get('', { params: { '': '' } });
-                setBoards(boards);
+            let project = await api.get('', { params: { '': '' } });
+            if (project) {
+                let projects = await api.get('', { params: { '': '' } });
+                setProjects(projects);
             }
         } catch (error) {
             console.error(error);
@@ -75,13 +75,13 @@ export default function Main() {
     }
 
     /************************   RENDERS   ******************************/
-    function renderButtonAddListFromBoard() {
+    function renderButtonAddListFromProject() {
         return (
             <div className="lists-content">
                 <Form>
                     <Form.Label>Lists</Form.Label>
                     <br />
-                    <Link key="new" to={`/list/new/${boardId}`}>
+                    <Link key="new" to={`/list/new/${projectId}`}>
                         <Button className="button-new-list" variant="info">
                             <b>{'\uFF0B'}</b>&nbsp;Add
                         </Button>
@@ -91,19 +91,19 @@ export default function Main() {
         );
     }
 
-    function renderBoardList(boards) {
+    function renderProjectList(projects) {
         return (
-            <div className="boards-content">
-                <Form onSubmit={handlerRemoveBoard}>
+            <div className="projects-content">
+                <Form onSubmit={handlerRemoveProject}>
                     <Form.Label>Projects</Form.Label>
-                    <Form.Control onChange={handleBoardChange} name="lista" as="select">
-                        {renderBoardOptions(boards)}
+                    <Form.Control onChange={handleProjectChange} name="lista" as="select">
+                        {renderProjectOptions(projects)}
                     </Form.Control>
 
-                    <Button className="button-add-board" onClick={handlerAddBoard} variant="info">
+                    <Button className="button-add-project" onClick={handlerAddProject} variant="info">
                         <b>{'\uFF0B'}</b>&nbsp;Add
                     </Button>
-                    <Button className="button-remove-board" type="submit" variant="secondary">
+                    <Button className="button-remove-project" type="submit" variant="secondary">
                         Delete
                     </Button>
                 </Form>
@@ -111,10 +111,10 @@ export default function Main() {
         );
     }
 
-    function renderBoardOptions(boards) {
-        return [].concat(boards).map((board, i) => (
-            <option key={i} value={board._id}>
-                {board.title}
+    function renderProjectOptions(projects) {
+        return [].concat(projects).map((project, i) => (
+            <option key={i} value={project._id}>
+                {project.title}
             </option>
         ));
     }
@@ -122,10 +122,10 @@ export default function Main() {
     return (
         <Container>
             <div className="row">
-                <div className="col-md-6">{renderButtonAddListFromBoard()}</div>
-                <div className="col-md-6">{renderBoardList(boards)}</div>
+                <div className="col-md-6">{renderButtonAddListFromProject()}</div>
+                <div className="col-md-6">{renderProjectList(projects)}</div>
             </div>
-            {/* <div className="row">{renderListFromBoard(lists)}</div> */}
+            {/* <div className="row">{renderListFromProject(lists)}</div> */}
         </Container>
     );
 }

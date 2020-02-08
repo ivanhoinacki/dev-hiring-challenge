@@ -34,17 +34,17 @@ export const Container = styled.div`
         margin-bottom: 15px;
     }
 
-    .boards-content {
+    .projects-content {
         float: right;
         width: 200px;
         margin-bottom: 15px;
     }
-    .button-add-board {
+    .button-add-project {
         font-size: 10px;
         margin: 5px;
         width: 90px;
     }
-    .button-remove-board {
+    .button-remove-project {
         font-size: 10px;
         margin: 5px;
         width: 90px;
