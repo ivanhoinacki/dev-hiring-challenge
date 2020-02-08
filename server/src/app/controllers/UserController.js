@@ -61,6 +61,14 @@ class UserController {
 
     return res.json({ id, name, email, provider });
   }
+
+  async findAllProjects(req, res) {}
+
+  async findByIdProject(req, res) {}
+
+  async storeProject(req, res) {}
+
+  async deleteProject(req, res) {}
 }
 
 export default new UserController();
