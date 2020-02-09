@@ -12,6 +12,9 @@ export const Container = styled.div`
     .description-card {
         font-size: 12px;
         font-family: Arial, Helvetica, sans-serif;
+        border-top-width: none !important;
+        border-bottom-right-radius: none !important;
+        border-bottom-left-radius: none !important;
     }
 
     .button-edit-card {
@@ -32,7 +35,7 @@ export const Container = styled.div`
     .lists-content {
         float: left;
         width: 200px;
-        margin-bottom: 15px;
+        padding-top: 42px;
     }
 
     .projects-content {

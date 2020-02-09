@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { format } from 'date-fns';
@@ -8,13 +8,17 @@ import { Button, Form, FormLabel, ListGroup, ListGroupItem } from 'react-bootstr
 
 import { Container, Spanstatus } from './styles';
 
+import { getProjectIdRequest } from '~/store/modules/user/actions';
 import api from '~/services/api';
 
 export default function Main() {
-    const [lists, setLists] = useState([]);
-    const [projects, setProjects] = useState([]);
-    const [projectId, setProjectId] = useState('');
+    const dispatch = useDispatch();
+
+    const [arrLists, setLists] = useState([]);
+    const [arrProjects, setProjects] = useState([]);
+
     const { id } = useSelector(state => state.user.profile);
+    const { _id, title } = useSelector(state => state.user.currentProject);
 
     useEffect(() => {
         async function onLoad() {
@@ -22,15 +26,27 @@ export default function Main() {
                 /**
                  * Carrega os projects do content
                  */
-
                 const { data } = await api.get(`/users/${id}/project`);
-                return setCurrentProject(data);
+                setProjects(data);
+                console.log(title + ' - ' + _id);
+                if (_id) {
+                    return getProjectById(_id);
+                } else {
+                    return getProjectById(data[0]._id);
+                }
             } catch (e) {
                 console.log(e);
             }
         }
         onLoad();
-    }, [id]); // adiciona o valor de entrada no useEffect
+    }, [id, _id]); // adiciona o valor de entrada no useEffect
+
+    function dateFormat(newDate) {
+        let data = new Date(newDate);
+        return `${data.getDate() + 1}/
+    ${data.getMonth() + 1 < 9 ? `0${data.getMonth() + 1}` : data.getMonth() + 1}/
+    ${data.getFullYear()}`;
+    }
 
     /************************   HANDLERS   ******************************/
     /**
@@ -39,42 +55,50 @@ export default function Main() {
     async function handlerRemoveProject(event) {
         try {
             event.preventDefault();
-            let project = await api.delete(`/users/project/${event.target.listproject.value}`);
-            if (project) {
+            const confirm = window.confirm('You want to remove this Project?');
+            if (confirm) {
+                await api.delete(`/users/project/${event.target.listproject.value}`);
                 const { data } = await api.get(`/users/${id}/project`);
-                return setCurrentProject(data);
+
+                setProjects(data);
+                setLists(data[0].lists);
             }
         } catch (error) {
             console.error(error);
         }
     }
 
-    function setCurrentProject(data) {
-        setProjects(data);
-        setProjectId(document.querySelector('[name="listproject"]').value);
-        setLists(data[0].lists);
+    async function getProjectById(id) {
+        console.log(id);
+        console.log('Atualizou a session e troxe dados atualizados..');
+        dispatch(getProjectIdRequest({ id: id }));
+        const { data } = await api.get(`/users/project/${id}`);
+        return setLists(data.lists);
     }
 
     /**
-     * Troca de project
+     * Troca de project -- DONE
      */
     async function handleProjectChange(event) {
         try {
             event.preventDefault();
-            setProjectId(event.target.value);
-            const { data } = await api.get(`/users/project/${event.target.value}`);
-            setLists(data.lists);
+            dispatch(getProjectIdRequest({ id: event.target.value }));
+            return getProjectById(event.target.value);
         } catch (error) {
             console.error(error);
         }
     }
 
+    /**
+     *
+     * Remove a lista do projeto -- DONE
+     */
     async function onHandlerClickRemoveList(event) {
         try {
             await api.delete(`/project/lists/${event.target.value}`);
-            const { data } = await api.get(`/users/${id}/project`);
             toast.success('List successfully deleted.');
-            return setCurrentProject(data);
+            console.log('removeu a lista');
+            return getProjectById(_id);
         } catch (error) {
             toast.error(error);
         }
@@ -83,9 +107,9 @@ export default function Main() {
     async function onHandlerClickRemoveTask(event) {
         try {
             await api.delete(`/lists/task/${event.target.value}`);
-            const { data } = await api.get(`/users/${id}/project`);
             toast.success('Task successfully deleted.');
-            return setCurrentProject(data);
+            console.log('removeu a tarefa');
+            return getProjectById(_id);
         } catch (error) {
             toast.error(error);
         }
@@ -96,6 +120,8 @@ export default function Main() {
             const confirm = window.confirm('You want to finish this task?');
             if (confirm) {
                 await api.put(`/lists/task/${event.target.value}/done`);
+                toast.success('Task successfully done.');
+                return getProjectById(_id);
             } else {
                 return;
             }
@@ -105,11 +131,11 @@ export default function Main() {
     /************************   RENDERS   ******************************/
     function renderButtonAddListFromProject() {
         return (
-            <div className="lists-content">
+            <div className="lists-content" hidden={_id ? '' : 'hidden'}>
                 <Form>
                     <Form.Label>Lists</Form.Label>
                     <br />
-                    <Link key="new" to={`/list/new/${projectId}`}>
+                    <Link key="new" to={`/list/new/${_id}`}>
                         <Button className="button-new-list" variant="info">
                             <b>{'\uFF0B'}</b>&nbsp;Add
                         </Button>
@@ -124,7 +150,7 @@ export default function Main() {
             <div className="projects-content">
                 <Form onSubmit={handlerRemoveProject}>
                     <Form.Label>Projects</Form.Label>
-                    <Form.Control onChange={handleProjectChange} name="listproject" as="select">
+                    <Form.Control onChange={handleProjectChange} value={_id} name="listproject" as="select">
                         {renderProjectOptions(projects)}
                     </Form.Control>
                     <Link to={`/project/new/${id}`}>
@@ -181,7 +207,7 @@ export default function Main() {
                             aria-label="Checkbox for complete task"
                         ></input>
                         <div className="mr-auto"></div>
-                        Conclusion: {format(new Date(task.dateCompletion), "dd 'de' MMMM", { locale: pt })}
+                        Conclusion: {dateFormat(task.dateCompletion)}
                     </span>
                     <hr />
                     <div className="mr-auto"></div>
@@ -223,9 +249,9 @@ export default function Main() {
         <Container>
             <div className="row">
                 <div className="col-md-6">{renderButtonAddListFromProject()}</div>
-                <div className="col-md-6">{renderProjectList(projects)}</div>
+                <div className="col-md-6">{renderProjectList(arrProjects)}</div>
             </div>
-            <div className="list-render row">{renderListFromProject(lists)}</div>
+            <div className="list-render row">{renderListFromProject(arrLists)}</div>
         </Container>
     );
 }

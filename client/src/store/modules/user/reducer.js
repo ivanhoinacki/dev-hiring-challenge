@@ -2,7 +2,7 @@ import produce from 'immer';
 
 const INITIAL_STATE = {
     profile: null,
-    projects: {},
+    currentProject: null,
 };
 
 export default function user(state = INITIAL_STATE, action) {
@@ -12,8 +12,8 @@ export default function user(state = INITIAL_STATE, action) {
                 draft.profile = action.payload.user;
                 break;
             }
-            case '@user/FIND_ALL_PROJECT_REQUEST': {
-                draft.projects = action.payload.projects;
+            case '@user/GET_PROJECT_SUCCESS': {
+                draft.currentProject = action.payload.data;
                 break;
             }
             case '@auth/LOG_OUT': {

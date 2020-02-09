@@ -1,19 +1,19 @@
-export function findAllProjectsRequest(data) {
+export function getProjectIdRequest(data) {
     return {
-        type: '@user/FIND_ALL_PROJECT_REQUEST',
+        type: '@user/GET_PROJECT_ID_REQUEST',
         payload: { data },
     };
 }
 
-export function findAllProjectsSuccess(projects) {
+export function getProjectIdSuccess(data) {
     return {
-        type: '@user/UPDATE_PROFILE_SUCCESS',
-        payload: { projects },
+        type: '@user/GET_PROJECT_SUCCESS',
+        payload: { data },
     };
 }
 
-export function findAllProjectsFailure() {
+export function getProjectIdFailure() {
     return {
-        type: '@user/UPDATE_PROFILE_FAILURE',
+        type: '@user/GET_PROJECT_FAILURE',
     };
 }

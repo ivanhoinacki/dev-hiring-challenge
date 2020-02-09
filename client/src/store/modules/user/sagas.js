@@ -2,20 +2,20 @@ import { takeLatest, call, put, all } from 'redux-saga/effects';
 import { toast } from 'react-toastify';
 
 import api from '~/services/api';
-import { findAllProjectsSuccess, findAllProjectsFailure } from './actions';
+import { getProjectIdSuccess, getProjectIdFailure } from './actions';
 
-export function* findAllProjects({ payload }) {
+export function* getProjectIdRequest({ payload }) {
     try {
         const { id } = payload.data;
 
-        const response = yield call(api.get, `/users/${id}/project`);
+        const response = yield call(api.get, `/users/project/${id}`);
 
-        yield put(findAllProjectsSuccess(response.data));
+        yield put(getProjectIdSuccess(response.data));
     } catch (err) {
         toast.error('There was a problem load your projects. Please verify your data');
 
-        yield put(findAllProjectsFailure());
+        yield put(getProjectIdFailure());
     }
 }
 
-export default all([takeLatest('@user/FIND_ALL_PROJECT_REQUEST', findAllProjects)]);
+export default all([takeLatest('@user/GET_PROJECT_ID_REQUEST', getProjectIdRequest)]);
