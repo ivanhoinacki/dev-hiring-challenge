@@ -65,3 +65,12 @@ export const Spanstatus = styled.span`
     background-color: ${props => (props.attrDone ? '#d4edda' : '#fff3cd')};
     border-color: ${props => (props.attrDone ? '#c3e6cb' : '#ffeeba')};
 `;
+
+export const HeaderTodoList = styled.span`
+    text-align: center;
+    padding-bottom: 0;
+    margin-top: -25px;
+    font-size: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: 600;
+`;

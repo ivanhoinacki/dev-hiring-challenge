@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { format } from 'date-fns';
-import pt from 'date-fns/locale/pt';
-import { Button, Form, FormLabel, ListGroup, ListGroupItem } from 'react-bootstrap';
 
-import { Container, Spanstatus } from './styles';
+import pt from 'date-fns/locale/pt';
+
+import { Button, Form, FormLabel, ListGroup, ListGroupItem } from 'react-bootstrap';
+import { Container, Spanstatus, HeaderTodoList } from './styles';
 
 import { getProjectIdRequest } from '~/store/modules/user/actions';
 import api from '~/services/api';
@@ -249,6 +251,7 @@ export default function Main() {
 
     return (
         <Container>
+            <HeaderTodoList>TODO LIST</HeaderTodoList>
             <div className="row">
                 <div className="col-md-6">{renderButtonAddListFromProject()}</div>
                 <div className="col-md-6">{renderProjectList(arrProjects)}</div>
