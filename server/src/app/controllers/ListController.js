@@ -5,7 +5,7 @@ class ListController {
   async storeTask(req, res) {
     try {
       const { id } = req.params;
-      const { title, descricao } = JSON.parse(req.body);
+      const { title, description, dateCompletion } = req.body;
 
       const list = await List.findById(id).populate('project');
 
@@ -15,7 +15,8 @@ class ListController {
 
       const task = await Task.create({
         title: title || 'New Task',
-        description: descricao || 'Digite uma descricao',
+        description: description || 'Digite uma descricao',
+        dateCompletion: dateCompletion,
         list: id,
         activities: [],
         members: [req.userId],
@@ -36,11 +37,38 @@ class ListController {
     }
   }
 
+  async updateTask(req, res) {
+    try {
+      const { id } = req.params;
+      const task = await Task.findById(id).populate({
+        path: 'list',
+        populate: { path: 'project' },
+      });
+
+      if (!task) {
+        return res.status(401).json({ message: 'Task not found' });
+      }
+
+      await Task.findByIdAndUpdate(
+        id,
+        {
+          done: true,
+        },
+        { new: true }
+      );
+
+      return res.status(200).json(task);
+    } catch (error) {
+      console.log(error);
+      return res.status(400).json(error.message);
+    }
+  }
+
   async deleteTask(req, res) {
     try {
       const { id } = req.params;
 
-      const task = await Task.findById(cardId).populate({
+      const task = await Task.findById(id).populate({
         path: 'list',
         populate: {
           path: 'project',
@@ -59,7 +87,7 @@ class ListController {
         }
       );
 
-      return res.status(400).json({
+      return res.status(200).json({
         data: task,
       });
     } catch (error) {

@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-
+import { toast } from 'react-toastify';
+import { format } from 'date-fns';
+import pt from 'date-fns/locale/pt';
 import { Button, Form, FormLabel, ListGroup, ListGroupItem } from 'react-bootstrap';
 
-import { Container } from './styles';
+import { Container, Spanstatus } from './styles';
 
 import api from '~/services/api';
 
@@ -22,10 +24,7 @@ export default function Main() {
                  */
 
                 const { data } = await api.get(`/users/${id}/project`);
-
-                setProjects(data);
-                setProjectId(document.querySelector('[name="lista"]').value);
-                setLists(data[0].lists);
+                return setCurrentProject(data);
             } catch (e) {
                 console.log(e);
             }
@@ -40,14 +39,20 @@ export default function Main() {
     async function handlerRemoveProject(event) {
         try {
             event.preventDefault();
-            let project = await api.get('', { params: { '': '' } });
+            let project = await api.delete(`/users/project/${event.target.listproject.value}`);
             if (project) {
-                let projects = await api.get('', { params: { '': '' } });
-                setProjects(projects);
+                const { data } = await api.get(`/users/${id}/project`);
+                return setCurrentProject(data);
             }
         } catch (error) {
             console.error(error);
         }
+    }
+
+    function setCurrentProject(data) {
+        setProjects(data);
+        setProjectId(document.querySelector('[name="listproject"]').value);
+        setLists(data[0].lists);
     }
 
     /**
@@ -55,22 +60,46 @@ export default function Main() {
      */
     async function handleProjectChange(event) {
         try {
+            event.preventDefault();
             setProjectId(event.target.value);
-            const projectsById = await api.get('', { params: { '': '' } });
-            setLists(projectsById.lists);
+            const { data } = await api.get(`/users/project/${event.target.value}`);
+            setLists(data.lists);
         } catch (error) {
             console.error(error);
         }
     }
 
     async function onHandlerClickRemoveList(event) {
-        let retorno = await api.get('', { params: { '': '' } });
-        console.log(retorno);
+        try {
+            await api.delete(`/project/lists/${event.target.value}`);
+            const { data } = await api.get(`/users/${id}/project`);
+            toast.success('List successfully deleted.');
+            return setCurrentProject(data);
+        } catch (error) {
+            toast.error(error);
+        }
     }
 
     async function onHandlerClickRemoveTask(event) {
-        let retorno = await api.get('', { params: { '': '' } });
-        console.log(retorno);
+        try {
+            await api.delete(`/lists/task/${event.target.value}`);
+            const { data } = await api.get(`/users/${id}/project`);
+            toast.success('Task successfully deleted.');
+            return setCurrentProject(data);
+        } catch (error) {
+            toast.error(error);
+        }
+    }
+
+    async function onHandlerChangeCkeckComplete(event) {
+        if (event.target.checked) {
+            const confirm = window.confirm('You want to finish this task?');
+            if (confirm) {
+                await api.put(`/lists/task/${event.target.value}/done`);
+            } else {
+                return;
+            }
+        }
     }
 
     /************************   RENDERS   ******************************/
@@ -95,7 +124,7 @@ export default function Main() {
             <div className="projects-content">
                 <Form onSubmit={handlerRemoveProject}>
                     <Form.Label>Projects</Form.Label>
-                    <Form.Control onChange={handleProjectChange} name="lista" as="select">
+                    <Form.Control onChange={handleProjectChange} name="listproject" as="select">
                         {renderProjectOptions(projects)}
                     </Form.Control>
                     <Link to={`/project/new/${id}`}>
@@ -123,6 +152,7 @@ export default function Main() {
         return [].concat(lists).map((list, i) => (
             <div className="col-md-3" key={i}>
                 <FormLabel>{list.title}</FormLabel>
+                <hr />
                 <ListGroup>{renderTaskList(list.task, list._id)}</ListGroup>
                 <hr />
             </div>
@@ -133,9 +163,32 @@ export default function Main() {
         return [{}].concat(tasks).map((task, i) =>
             i !== 0 ? (
                 <ListGroupItem key={i} className="description-card">
-                    {task.title} -{' Data criação: ' + new Date(task.createdAt).toLocaleString()}
+                    <span>
+                        <b>
+                            {task.title} -{' '}
+                            <Spanstatus attrDone={task.done ? true : false}>
+                                {task.done ? 'Done!' : 'Pending..'}{' '}
+                            </Spanstatus>
+                        </b>
+                        <div className="mr-auto"></div>
+                        <span>Check for Done </span>
+                        <input
+                            type="checkbox"
+                            value={task._id}
+                            checked={task.done ? true : false}
+                            disabled={task.done ? true : false}
+                            onChange={onHandlerChangeCkeckComplete}
+                            aria-label="Checkbox for complete task"
+                        ></input>
+                        <div className="mr-auto"></div>
+                        Conclusion: {format(new Date(task.dateCompletion), "dd 'de' MMMM", { locale: pt })}
+                    </span>
+                    <hr />
                     <div className="mr-auto"></div>
+                    <p>{task.description}</p>
+                    <hr />
                     <Button
+                        disabled={task.done ? true : false}
                         className="button-edit-card"
                         variant="outline-danger"
                         onClick={onHandlerClickRemoveTask}
@@ -143,21 +196,23 @@ export default function Main() {
                     >
                         Delete
                     </Button>
+
+                    <span>{' Create at: ' + format(new Date(task.createdAt), 'dd/MM/yyyy', { locale: pt })}</span>
                 </ListGroupItem>
             ) : (
                 <ListGroupItem key="new">
                     <Link className="button" to={`/task/new/${listId}`}>
                         <Button variant="outline-info">
-                            <b>{'\uFF0B'}</b>&nbsp;Tarefa
+                            <b>{'\uFF0B'}</b>&nbsp;Task
                         </Button>
                     </Link>
                     <Button
                         className="button-remove-list"
-                        variant="outline-info"
+                        variant="secondary"
                         onClick={onHandlerClickRemoveList}
                         value={listId}
                     >
-                        Remove
+                        Delete
                     </Button>
                 </ListGroupItem>
             )
@@ -170,7 +225,7 @@ export default function Main() {
                 <div className="col-md-6">{renderButtonAddListFromProject()}</div>
                 <div className="col-md-6">{renderProjectList(projects)}</div>
             </div>
-            <div className="row">{renderListFromProject(lists)}</div>
+            <div className="list-render row">{renderListFromProject(lists)}</div>
         </Container>
     );
 }

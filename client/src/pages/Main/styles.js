@@ -8,10 +8,10 @@ export const Container = styled.div`
     flex-direction: column;
     padding-left: 20px;
     padding-right: 20px;
+
     .description-card {
         font-size: 12px;
         font-family: Arial, Helvetica, sans-serif;
-        text-align: justify;
     }
 
     .button-edit-card {
@@ -50,4 +50,15 @@ export const Container = styled.div`
         margin: 5px;
         width: 90px;
     }
+`;
+
+export const Spanstatus = styled.span`
+    position: relative;
+    padding: -0.25rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: 0.25rem;
+    color: ${props => (props.attrDone ? '#155724' : '#856404')};
+    background-color: ${props => (props.attrDone ? '#d4edda' : '#fff3cd')};
+    border-color: ${props => (props.attrDone ? '#c3e6cb' : '#ffeeba')};
 `;

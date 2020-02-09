@@ -39,6 +39,8 @@ routes.delete('/project/lists/:id', ProjectController.deleteList); // delete o p
 // DONE
 routes.post('/lists/:id/tasks', ListController.storeTask); // cria uma tarefa para a lista
 // DONE
+routes.put('/lists/task/:id/done', ListController.updateTask); // atualiza conclusao da tarefa
+// DONE
 routes.delete('/lists/task/:id', ListController.deleteTask); // cria uma tarefa para a lista
 
 export default routes;

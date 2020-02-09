@@ -101,7 +101,7 @@ class UserController {
           },
         },
       });
-      res.status(200).json({ data: project });
+      res.status(200).json(project);
     } catch (error) {
       res.status(400).json(error);
     }

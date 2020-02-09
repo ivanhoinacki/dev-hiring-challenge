@@ -35,26 +35,23 @@ class ProjectController {
   async deleteList(req, res) {
     try {
       const { id } = req.params;
+      const list = await List.findById(id).populate('project');
 
-      const project = await Project.findById(boardId);
-
-      if (!project) {
-        return res.status(401).json({ message: 'Project not found' });
+      if (!list) {
+        return res.status(401).json({ message: 'List not found' });
       }
 
-      await Project.findByIdAndRemove(id);
+      await List.findByIdAndRemove(id);
 
-      await User.update(
-        { projects: { $in: [project._id] } },
-        {
-          $pull: { projects: project._id },
-        },
-        { multi: true }
-      );
+      // TODO: - verificar error cast number
+      // await Project.update(
+      //   { lists: { $in: [id] } },
+      //   {
+      //     $pop: { lists: list },
+      //   }
+      // );
 
-      return res.status(200).json({
-        data: project,
-      });
+      return res.status(200).json(list);
     } catch (error) {
       console.log(error);
       return res.status(400).json(error.message);
