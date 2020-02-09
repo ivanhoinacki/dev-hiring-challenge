@@ -1,14 +1,19 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-import { Container, Content, Profile } from './Header_Styles';
+import { Container, Content, Profile, Button } from './Header_Styles';
 
 import logo from '~/assets/img/edirect-logo.svg';
+import { logOut } from '~/store/modules/auth/actions';
 
 export default function Header() {
+    const dispatch = useDispatch();
     const profile = useSelector(state => state.user.profile);
 
+    function onHandlerClickLogout() {
+        dispatch(logOut());
+    }
     return (
         <Container>
             <Content>
@@ -26,6 +31,7 @@ export default function Header() {
                         </div>
                     </Profile>
                 </aside>
+                <Button onClick={onHandlerClickLogout}>Logout</Button>
             </Content>
         </Container>
     );

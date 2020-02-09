@@ -66,3 +66,9 @@ export const Profile = styled.section`
         border-radius: 50%;
     }
 `;
+
+export const Button = styled.button`
+    margin: 0;
+    padding: 0;
+    float: right;
+`;

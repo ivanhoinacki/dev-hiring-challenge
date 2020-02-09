@@ -18,6 +18,7 @@ export default function user(state = INITIAL_STATE, action) {
             }
             case '@auth/LOG_OUT': {
                 draft.profile = null;
+                draft.currentProject = null;
                 break;
             }
             default:

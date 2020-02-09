@@ -18,7 +18,7 @@ export default function Main() {
     const [arrProjects, setProjects] = useState([]);
 
     const { id } = useSelector(state => state.user.profile);
-    const { _id, title } = useSelector(state => state.user.currentProject);
+    const { _id } = useSelector(state => state.user.currentProject) || {};
 
     useEffect(() => {
         async function onLoad() {
@@ -28,11 +28,13 @@ export default function Main() {
                  */
                 const { data } = await api.get(`/users/${id}/project`);
                 setProjects(data);
-                console.log(title + ' - ' + _id);
+
                 if (_id) {
                     return getProjectById(_id);
                 } else {
-                    return getProjectById(data[0]._id);
+                    if (data.length) {
+                        return getProjectById(data[0]._id);
+                    }
                 }
             } catch (e) {
                 console.log(e);
