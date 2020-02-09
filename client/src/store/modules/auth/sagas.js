@@ -44,6 +44,7 @@ export function* signUp({ payload }) {
         });
 
         history.push('/');
+        toast.success('User successfully registered.');
     } catch (err) {
         toast.error('Registration failed. Please verify your data.');
         yield put(signFailure());

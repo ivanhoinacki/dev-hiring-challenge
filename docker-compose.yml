@@ -1,0 +1,44 @@
+version: '3'
+
+services:
+  portal-client:
+    hostname: localhost
+    build:
+      context: ./client
+    container_name: client
+    ports:
+      - '8080:80'
+    depends_on:
+      - node-api-1
+    networks:
+      - production-network
+
+  node-api-1:
+    build:
+      context: ./server
+    container_name: server-api-1
+    restart: always
+    depends_on:
+      - mongo_db
+    ports:
+      - 3000:3000
+    environment:
+      PORT: 3000
+      NODE_ENV: 'production'
+      MONGODB_HOST: mongo_db
+      MONGODB_DATABASE: 'todolist-api'
+      MONGODB_PORT: '27017'
+      APP_SECRET: 'd6b993f3100c0cde5b08d2efddda1b34'
+    networks:
+      - production-network
+
+  mongo_db:
+    image: mongo
+    container_name: mongo_db
+    restart: unless-stopped
+    networks:
+      - production-network
+
+networks:
+  production-network:
+    driver: bridge
