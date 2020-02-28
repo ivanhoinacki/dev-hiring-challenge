@@ -1,6 +1,6 @@
 import request from 'supertest';
 import jwt from 'jsonwebtoken';
-import app from '../src/app';
+import app from '../../src/app';
 
 describe('Session', () => {
   /**
@@ -19,6 +19,57 @@ describe('Session', () => {
     let decoded = jwt.decode(response.body.token, { complete: true });
     expect(response.body.token).toBeDefined(); // token retornado e decodificado
     expect(decoded.payload.email).toBe('ivanhweb@gmail.com'); // email enviado decodificado
+    done();
+  });
+
+  it('Se nao existir usuario ele retonar um erro 401 e mensagem de erro', async done => {
+    const response = await request(app)
+      .post('/sessions')
+      .send({
+        email: '0000000@gmail.com',
+        password: '20401359',
+      });
+
+    expect(response.status).toBe(401);
+    expect(response.body.error).toBe('User not found');
+    done();
+  });
+
+  it('Se a senha estiver errada ele retorna 401 e senha incorreta', async done => {
+    const response = await request(app)
+      .post('/sessions')
+      .send({
+        email: 'ivanhweb@gmail.com',
+        password: '20401352',
+      });
+
+    expect(response.status).toBe(401);
+    expect(response.body.error).toBe('Password does not match!');
+    done();
+  });
+
+  it('Se a nao informar um dos parametros', async done => {
+    const response = await request(app)
+      .post('/sessions')
+      .send({
+        password: '20401352',
+      });
+
+    expect(response.status).toBe(400);
+    expect(response.body.error).toBe('Validation fails');
+    done();
+  });
+
+  it('Se nao tiver um email valido', async done => {
+    const response = await request(app)
+      .post('/sessions')
+      .send({
+        email: 'iva2nhweb@gmail..com',
+        password: '20401352',
+      });
+
+    expect(response.status).toBe(400);
+    expect(response.body.error).toBe('Validation fails');
     done();
   });
 });
