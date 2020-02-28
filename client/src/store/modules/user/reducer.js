@@ -3,6 +3,7 @@ import produce from 'immer';
 const INITIAL_STATE = {
     profile: null,
     currentProject: null,
+    allProjects: null,
 };
 
 export default function user(state = INITIAL_STATE, action) {
@@ -12,8 +13,20 @@ export default function user(state = INITIAL_STATE, action) {
                 draft.profile = action.payload.user;
                 break;
             }
-            case '@user/GET_PROJECT_SUCCESS': {
+            case '@user/GET_BYID_PROJECT_SUCCESS': {
                 draft.currentProject = action.payload.data;
+                break;
+            }
+            case '@user/FIND_ALL_PROJECT_SUCCESS': {
+                draft.allProjects = action.payload.data;
+                if (!state.currentProject) {
+                    draft.currentProject = action.payload.data[0];
+                }
+                break;
+            }
+            case '@user/DELETE_PROJECT_SUCCESS': {
+                draft.allProjects = action.payload.data;
+                draft.currentProject = action.payload.data[0];
                 break;
             }
             case '@auth/LOG_OUT': {

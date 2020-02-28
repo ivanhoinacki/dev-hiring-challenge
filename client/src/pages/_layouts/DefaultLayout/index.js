@@ -19,8 +19,7 @@ export default function DefaultLayout({ children }) {
             register = false;
             break;
     }
-    console.log(register);
-    console.log(children.props.match.path);
+
     return register ? (
         <WrapperRegistration>
             <Header />

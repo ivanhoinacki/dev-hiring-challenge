@@ -5,11 +5,17 @@ import api from '~/services/api';
 import * as Yup from 'yup';
 import { Container } from './styles';
 
+import { getByIdProjectRequest } from '~/store/modules/user/actions';
+import { useSelector, useDispatch } from 'react-redux';
+
 const schema = Yup.object().shape({
     title: Yup.string().required('Please enter one title'),
 });
 
 export default function List(props) {
+    const { _id } = useSelector(state => state.user.currentProject) || {};
+    const dispatch = useDispatch();
+
     async function handleSubmit({ title }) {
         try {
             let { id } = props.match.params;
@@ -18,6 +24,7 @@ export default function List(props) {
 
             if (list) {
                 toast.success('List saved successfully.');
+                dispatch(getByIdProjectRequest({ id: _id }));
                 props.history.push('/main');
             }
         } catch (e) {
