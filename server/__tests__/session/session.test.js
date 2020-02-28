@@ -2,7 +2,7 @@ import request from 'supertest';
 import jwt from 'jsonwebtoken';
 import app from '../src/app';
 
-describe('App', () => {
+describe('Session', () => {
   it('Se eu enviar um usuario e senha valido ele retorna um token jwt', async done => {
     const response = await request(app)
       .post('/sessions')
