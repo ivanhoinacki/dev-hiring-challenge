@@ -12,7 +12,7 @@ module.exports = {
   // browser: false,
 
   // The directory where Jest should store its cached dependency information
-  // cacheDirectory: "/private/var/folders/kb/0w19w1gs3fsbhh66yjvwm4dm0000gn/T/jest_dx",
+  // cacheDirectory: "/private/v '^.+\\.(js)$': 'babel-jest'ar/folders/kb/0w19w1gs3fsbhh66yjvwm4dm0000gn/T/jest_dx",
 
   // Automatically clear mock calls and instances between every test
   clearMocks: true,
@@ -21,7 +21,7 @@ module.exports = {
   collectCoverage: true,
 
   // An array of glob patterns indicating a set of files for which coverage information should be collected
-  collectCoverageFrom: ['src/app/**/*.test.js'], // indica onde esta a pasta do codigo
+  collectCoverageFrom: ['src/app/**/*.js'], // indica onde esta a pasta do codigo
   // procurando todos os arquivos js
   // The directory where Jest should output its coverage files
   coverageDirectory: '__tests__/coverage',
@@ -160,7 +160,9 @@ module.exports = {
   // timers: "real",
 
   // A map from regular expressions to paths to transformers
-  transform: { '.(js|jsx|ts|tsx)': '@sucrase/jest-plugin' },
+  transform: {
+    '.(js|jsx|ts|tsx)': '@sucrase/jest-plugin',
+  },
 
   // An array of regexp pattern strings that are matched against all source file paths, matched files will skip transformation
   // transformIgnorePatterns: [

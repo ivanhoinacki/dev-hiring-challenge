@@ -1,5 +1,3 @@
-require('dotenv').config({ path: './.env' });
-
 const mongodbURI = () => {
   const MONGODB_DATABASE = process.env.MONGODB_DATABASE || 'todolist-api';
   const MONGODB_HOST = process.env.MONGODB_HOST || 'localhost';
